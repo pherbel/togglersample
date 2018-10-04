@@ -24,7 +24,14 @@ This service must be able to broadcast to every service/application that a toggl
 
 ## Getting started
 
-This project was generated with [Dotnet CLI](https://docs.microsoft.com/en-us/dotnet/core/tools/?tabs=netcore2x) SDK version 2.1.403 and uses C# 7.3 language features and SDK-style projects, so you'll need any edition of Visual Studio 2017 (15.8.6 or above) or Visual Studio Code to open and compile the project. The free Community Edition will work.
+This project was generated with [Dotnet CLI](https://docs.microsoft.com/en-us/dotnet/core/tools/?tabs=netcore2x) SDK version 2.1.403 and [Dotnet Boxed Api Template](https://github.com/Dotnet-Boxed/Templates)
+
+1. Install the latest [.NET Core SDK](https://dot.net).
+2. Run `dotnet new --install "Boxed.Templates::*"` to install the project template.
+3. Run `dotnet new api --help` to see how to select the feature of the project.
+5. Run `dotnet new api --name "ToggleService"` along with any other custom options to create a project from the template.
+
+It uses C# 7.3 language features and SDK-style projects, so you'll need any edition of Visual Studio 2017 (15.8.6 or above) or Visual Studio Code to open and compile the project. The free Community Edition will work.
 
 ### Requirements
 
