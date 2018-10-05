@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using TogglerService.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using TogglerService.Models;
+using System;
 
 namespace TogglerService.Commands
 {
@@ -14,6 +15,9 @@ namespace TogglerService.Commands
 
         public DeleteGlobalToggleCommand(IGlobalToggleRepository globalToggleRepository)
         {
+            if (globalToggleRepository is null)
+                throw new ArgumentNullException(nameof(globalToggleRepository));
+
             _globalToggleRepository = globalToggleRepository;
         }
 

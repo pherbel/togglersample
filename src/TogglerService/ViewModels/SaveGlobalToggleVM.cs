@@ -1,4 +1,4 @@
-using Swashbuckle.AspNetCore.Annotations;
+﻿using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using TogglerService.ViewModelSchemaFilters;
 
@@ -16,6 +16,7 @@ namespace TogglerService.ViewModels
         /// The global toggles unique identifier.
         /// </summary>
         [StringLength(50)]
+        [Required]
         public string Id { get; set; }
 
 

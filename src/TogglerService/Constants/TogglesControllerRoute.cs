@@ -1,4 +1,4 @@
-namespace TogglerService.Constants
+﻿namespace TogglerService.Constants
 {
     public static class TogglesControllerRoute
     {
@@ -10,5 +10,15 @@ namespace TogglerService.Constants
         public const string PatchGlobalToggle = ControllerName.Toggle + nameof(PatchGlobalToggle);
         public const string PostGlobalToggle = ControllerName.Toggle + nameof(PostGlobalToggle);
         public const string PutGlobalToggle = ControllerName.Toggle + nameof(PutGlobalToggle);
+
+
+        public const string DeleteServiceToggle = ControllerName.Toggle + nameof(DeleteServiceToggle);
+        public const string GetServiceToggle = ControllerName.Toggle + nameof(GetServiceToggle);
+        public const string GetServiceTogglesList = ControllerName.Toggle + nameof(GetServiceTogglesList);
+        public const string HeadServiceToggle = ControllerName.Toggle + nameof(HeadServiceToggle);
+        public const string HeadServiceTogglesList = ControllerName.Toggle + nameof(HeadServiceTogglesList);
+        public const string PatchServiceToggle = ControllerName.Toggle + nameof(PatchServiceToggle);
+        public const string PostServiceToggle = ControllerName.Toggle + nameof(PostServiceToggle);
+        public const string PutServiceToggle = ControllerName.Toggle + nameof(PutServiceToggle);
     }
 }

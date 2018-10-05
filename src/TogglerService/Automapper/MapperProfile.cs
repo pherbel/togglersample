@@ -1,18 +1,19 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using TogglerService.Models;
+using TogglerService.ViewModels;
 
 namespace TogglerService.Automapper
 {
-    public class MapperProfile: Profile
+    public class MapperProfile : Profile
     {
         public MapperProfile()
         {
-                //CreateMap<>
+            CreateMap<GlobalToggleVM, GlobalToggle>().ReverseMap();
+            CreateMap<SaveGlobalToggleVM, GlobalToggle>(MemberList.Source);
+            CreateMap<ServiceToggleVM, ServiceToggle>().ReverseMap();
+            CreateMap<SaveServiceToggleVM, ServiceToggle>(MemberList.Source);
 
-            
+            CreateMap<Toggle, ToggleVM>();
         }
     }
 }

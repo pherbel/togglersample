@@ -1,4 +1,4 @@
-using Swashbuckle.AspNetCore.Annotations;
+﻿using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using TogglerService.ViewModelSchemaFilters;
 
@@ -15,6 +15,7 @@ namespace TogglerService.ViewModels
         /// The service toggles unique identifier.
         /// </summary>
         [StringLength(50)]
+        [Required]
         public string Id { get; set; }
 
 
@@ -25,8 +26,17 @@ namespace TogglerService.ViewModels
         public bool Value { get; set; }
 
         /// <summary>
-        /// The default value for the service toggle
+        /// The service unique identifier.
         /// </summary>
+        [Required]
+        [StringLength(50)]
+        public string ServiceId { get; set; }
+
+        /// <summary>
+        /// The service version range.
+        /// </summary>
+        [Required]
+        [StringLength(50)]
         public string VersionRange { get; set; }
 
 

@@ -16,31 +16,31 @@ namespace TogglerService.Commands
 {
 
 
-    public class GetGlobalToggleCommand : IGetGlobalToggleCommand
+    public class GetServiceToggleCommand : IGetServiceToggleCommand
     {
         private readonly IActionContextAccessor _actionContextAccessor;
-        private readonly IGlobalToggleRepository _globalToggleRepository;
+        private readonly IServiceToggleRepository _serviceToggleRepository;
         private readonly IMapper _mapper;
 
-        public GetGlobalToggleCommand(IActionContextAccessor actionContextAccessor, IGlobalToggleRepository globalToggleRepository, IMapper mapper)
+        public GetServiceToggleCommand(IActionContextAccessor actionContextAccessor, IServiceToggleRepository serviceToggleRepository, IMapper mapper)
         {
             if (actionContextAccessor is null)
                 throw new ArgumentNullException(nameof(actionContextAccessor));
 
-            if (globalToggleRepository is null)
-                throw new ArgumentNullException(nameof(globalToggleRepository));
+            if (serviceToggleRepository is null)
+                throw new ArgumentNullException(nameof(serviceToggleRepository));
 
             if (mapper is null)
                 throw new ArgumentNullException(nameof(mapper));
 
             _actionContextAccessor = actionContextAccessor;
-            _globalToggleRepository = globalToggleRepository;
+            _serviceToggleRepository = serviceToggleRepository;
             _mapper = mapper;
         }
 
         public async Task<IActionResult> ExecuteAsync(string toggleId, CancellationToken cancellationToken)
         {
-            GlobalToggle toggle = await _globalToggleRepository.GetById(toggleId, cancellationToken);
+            ServiceToggle toggle = await _serviceToggleRepository.GetById(toggleId, cancellationToken);
             if (toggle == null)
             {
                 return new NotFoundResult();
@@ -56,7 +56,7 @@ namespace TogglerService.Commands
                 }
             }
 
-            GlobalToggleVM toggleViewModel = _mapper.Map<GlobalToggle,GlobalToggleVM>(toggle);
+            ServiceToggleVM toggleViewModel = _mapper.Map<ServiceToggle,ServiceToggleVM>(toggle);
             httpContext.Response.Headers.Add(HeaderNames.LastModified, toggle.Modified.ToString("R", CultureInfo.InvariantCulture));
             return new OkObjectResult(toggleViewModel);
         }

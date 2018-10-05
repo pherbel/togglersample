@@ -70,7 +70,10 @@ namespace TogglerService
                     .AddVersionedApiExplorer(x => x.GroupNameFormat = "'v'VVV") // Version format: 'v'major[.minor][-status]
                     .AddCustomMvcOptions()
                     .Services
-                    .AddAutoMapper()
+                    .AddAutoMapper(c =>
+                    {
+
+                    }, typeof(Startup))
                     .AddProjectCommands()
                     .AddProjectRepositories()
                     .AddProjectServices()

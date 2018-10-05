@@ -16,24 +16,24 @@ namespace TogglerService.Commands
 {
 
 
-    public class GetGlobalTogglesListCommand : IGetGlobalTogglesListCommand
+    public class GetServiceTogglesListCommand : IGetServiceTogglesListCommand
     {
-        private readonly IGlobalToggleRepository _globalToggleRepository;
+        private readonly IServiceToggleRepository _serviceToggleRepository;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GetGlobalTogglesListCommand(IGlobalToggleRepository globalToggleRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public GetServiceTogglesListCommand(IServiceToggleRepository serviceToggleRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             if (httpContextAccessor is null)
                 throw new ArgumentNullException(nameof(httpContextAccessor));
 
-            if (globalToggleRepository is null)
-                throw new ArgumentNullException(nameof(globalToggleRepository));
+            if (serviceToggleRepository is null)
+                throw new ArgumentNullException(nameof(serviceToggleRepository));
 
             if (mapper is null)
                 throw new ArgumentNullException(nameof(mapper));
 
-            _globalToggleRepository = globalToggleRepository;
+            _serviceToggleRepository = serviceToggleRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
 
@@ -41,12 +41,12 @@ namespace TogglerService.Commands
 
         public async Task<IActionResult> ExecuteAsync(CancellationToken cancellationToken)
         {
-            ICollection<GlobalToggle> toggles = await _globalToggleRepository.GetAll(cancellationToken);
+            ICollection<ServiceToggle> toggles = await _serviceToggleRepository.GetAll(cancellationToken);
             if (toggles == null)
             {
                 return new NotFoundResult();
             }
-            return new OkObjectResult(_mapper.Map<ICollection<GlobalToggle>, List<GlobalToggleVM>>(toggles));
+            return new OkObjectResult(_mapper.Map<ICollection<ServiceToggle>, List<ServiceToggleVM>>(toggles));
         }
     }
 }
