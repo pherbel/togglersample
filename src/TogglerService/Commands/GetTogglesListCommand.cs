@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Boxed.Mapping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -66,7 +65,7 @@ namespace TogglerService.Commands
             {
                 return new NotFoundResult();
             }
-            List<Toggle> resultToggles = _ruleEvaluator.Eval(globalToggles,serviceToggles);
+            List<Toggle> resultToggles = _ruleEvaluator.Eval(serviceId, version, globalToggles, serviceToggles);
 
             return new OkObjectResult(_mapper.Map<ICollection<Toggle>, List<ToggleVM>>(resultToggles));
         }

@@ -8,6 +8,6 @@ namespace TogglerService.Services
 {
     public interface IHierarchyRuleEvaluator
     {
-        List<Toggle> Eval(List<GlobalToggle> globaltoggles, List<ServiceToggle> serviceToggles);
+        List<Toggle> Eval(string serviceId, string version, List<GlobalToggle> globaltoggles, List<ServiceToggle> serviceToggles);
     }
 }
