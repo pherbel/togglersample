@@ -1,4 +1,4 @@
-namespace TogglerService.Options
+﻿namespace TogglerService.Options
 {
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc;
@@ -6,7 +6,7 @@ namespace TogglerService.Options
     /// <summary>
     /// The caching options for the application.
     /// </summary>
-    public class CacheProfileOptions : Dictionary<string, CacheProfile>
+    public class CacheProfileOptionsDictionary : Dictionary<string, CacheProfile>
     {
     }
 }

@@ -1,18 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using TogglerService.Models;
+
 namespace TogglerService.Repositories
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using TogglerService.Models;
+
 
     public class ServiceToggleRepository : IServiceToggleRepository
     {
         private static readonly List<ServiceToggle> Toggles;
 
-        static ServiceToggleRepository() =>
-            Toggles = new List<ServiceToggle>() 
+#pragma warning disable CA1810 // Initialize reference type static fields inline
+        static ServiceToggleRepository()
+#pragma warning restore CA1810 // Initialize reference type static fields inline
+        {
+            Toggles = new List<ServiceToggle>()
             {
                 new ServiceToggle()
                 {
@@ -33,6 +38,7 @@ namespace TogglerService.Repositories
                     Modified = DateTimeOffset.UtcNow,
                 },
             };
+        }
 
         public Task<ServiceToggle> Add(ServiceToggle toggle, CancellationToken cancellationToken)
         {
@@ -51,9 +57,9 @@ namespace TogglerService.Repositories
             return Task.CompletedTask;
         }
 
-        public Task<ServiceToggle> Get(string toggleId, CancellationToken cancellationToken)
+        public Task<ServiceToggle> GetById(string toggleId, CancellationToken cancellationToken)
         {
-            var toggle = Toggles.FirstOrDefault(x => x.Id == toggleId);
+            ServiceToggle toggle = Toggles.FirstOrDefault(x => x.Id == toggleId);
             return Task.FromResult(toggle);
         }
 
@@ -64,7 +70,7 @@ namespace TogglerService.Repositories
 
         public Task<ServiceToggle> Update(ServiceToggle toggle, CancellationToken cancellationToken)
         {
-            var existingToggle = Toggles.FirstOrDefault(x => x.Id == toggle.Id && x.ServiceId == toggle.ServiceId);
+            ServiceToggle existingToggle = Toggles.FirstOrDefault(x => x.Id == toggle.Id && x.ServiceId == toggle.ServiceId);
             existingToggle.Value = toggle.Value;
             existingToggle.VersionRange = toggle.VersionRange;
             existingToggle.Modified = DateTime.UtcNow;

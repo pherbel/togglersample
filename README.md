@@ -55,6 +55,7 @@ Run `dotnet test` in the Test project directory
 
 Please see
 
+[Dotnet Namein Guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-guidelines)
 
 ### Used dependency
 

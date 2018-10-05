@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Boxed.AspNetCore;
 using CorrelationId;
 using Microsoft.AspNetCore.Builder;
@@ -45,7 +45,7 @@ namespace TogglerService
             return services
                     .AddCorrelationIdFluent()
                     .AddCustomCaching()
-                    .AddCustomOptions(this.configuration)
+                    .AddCustomOptions(configuration)
                     .AddCustomRouting()
                     .AddResponseCaching()
                     .AddCustomResponseCompression()
@@ -65,10 +65,10 @@ namespace TogglerService
                     .AddAuthorization()
                     .AddDataAnnotations()
                     .AddJsonFormatters()
-                    .AddCustomJsonOptions(this.hostingEnvironment)
+                    .AddCustomJsonOptions(hostingEnvironment)
                     .AddCustomCors()
                     .AddVersionedApiExplorer(x => x.GroupNameFormat = "'v'VVV") // Version format: 'v'major[.minor][-status]
-                    .AddCustomMvcOptions(this.hostingEnvironment)
+                    .AddCustomMvcOptions()
                     .Services
                     .AddAutoMapper()
                     .AddProjectCommands()
@@ -91,10 +91,10 @@ namespace TogglerService
             .UseResponseCompression()
             .UseCors(CorsPolicyName.AllowAny)
             .UseIf(
-            !this.hostingEnvironment.IsDevelopment(),
+            !hostingEnvironment.IsDevelopment(),
             x => x.UseHsts())
             .UseIf(
-            this.hostingEnvironment.IsDevelopment(),
+            hostingEnvironment.IsDevelopment(),
             x => x.UseDeveloperErrorPages())
             .UseStaticFilesWithCacheControl()
             .UseMvc()

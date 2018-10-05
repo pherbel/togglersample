@@ -23,15 +23,15 @@ namespace TogglerService.Commands
 
         public GetGlobalTogglesListCommand(IGlobalToggleRepository globalToggleRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
-            this._globalToggleRepository = globalToggleRepository;
-            this._mapper = mapper;
-            this._httpContextAccessor = httpContextAccessor;
+            _globalToggleRepository = globalToggleRepository;
+            _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
 
         }
 
         public async Task<IActionResult> ExecuteAsync(CancellationToken cancellationToken)
         {
-            var toggles = await this._globalToggleRepository.GetAll(cancellationToken);
+            ICollection<GlobalToggle> toggles = await _globalToggleRepository.GetAll(cancellationToken);
             if (toggles == null)
             {
                 return new NotFoundResult();

@@ -1,4 +1,4 @@
-namespace TogglerService.Repositories
+﻿namespace TogglerService.Repositories
 {
     using System.Collections.Generic;
     using System.Threading;
@@ -11,7 +11,7 @@ namespace TogglerService.Repositories
 
         Task Delete(GlobalToggle toggle, CancellationToken cancellationToken);
 
-        Task<GlobalToggle> Get(string toggleId, CancellationToken cancellationToken);
+        Task<GlobalToggle> GetById(string toggleId, CancellationToken cancellationToken);
 
         Task<ICollection<GlobalToggle>> GetAll(CancellationToken cancellationToken);
 

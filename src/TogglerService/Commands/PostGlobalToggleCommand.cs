@@ -24,15 +24,15 @@ namespace TogglerService.Commands
             if (mapper is null)
                 throw new ArgumentNullException(nameof(mapper));
 
-            this._globalToggleRepository = globalToggleRepository;
-            this._mapper = mapper;
+            _globalToggleRepository = globalToggleRepository;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> ExecuteAsync(SaveGlobalToggleVM createToggle, CancellationToken cancellationToken)
         {
-            var toggle = _mapper.Map<SaveGlobalToggleVM, GlobalToggle>(createToggle);
-            toggle = await this._globalToggleRepository.Add(toggle, cancellationToken);
-            var toggleViewModel = this._mapper.Map<GlobalToggle, GlobalToggleVM>(toggle);
+            GlobalToggle toggle = _mapper.Map<SaveGlobalToggleVM, GlobalToggle>(createToggle);
+            toggle = await _globalToggleRepository.Add(toggle, cancellationToken);
+            GlobalToggleVM toggleViewModel = _mapper.Map<GlobalToggle, GlobalToggleVM>(toggle);
 
             return new CreatedAtRouteResult(
                 TogglesControllerRoute.GetGlobalToggle,

@@ -35,7 +35,7 @@ namespace TogglerService.Controllers
             {
                 var tasks = new List<Task>();
 
-                foreach (var healthChecker in this.healthCheckers)
+                foreach (IHealthChecker healthChecker in healthCheckers)
                 {
                     tasks.Add(healthChecker.CheckHealth());
                 }

@@ -18,21 +18,26 @@ namespace TogglerService
     /// </remarks>
     public static class ProjectServiceCollectionExtensions
     {
-        public static IServiceCollection AddProjectCommands(this IServiceCollection services) =>
-            services
-                .AddSingleton<IDeleteGlobalToggleCommand, DeleteGlobalToggleCommand>()
-                .AddSingleton<IGetGlobalToggleCommand, GetGlobalToggleCommand>()
-                .AddSingleton<IGetGlobalTogglesListCommand, GetGlobalTogglesListCommand>()
-                .AddSingleton<IPostGlobalToggleCommand, PostGlobalToggleCommand>()
-                .AddSingleton<IPutGlobalToggleCommand, PutGlobalToggleCommand>();
+        public static IServiceCollection AddProjectCommands(this IServiceCollection services)
+        {
+            return services
+.AddSingleton<IDeleteGlobalToggleCommand, DeleteGlobalToggleCommand>()
+.AddSingleton<IGetGlobalToggleCommand, GetGlobalToggleCommand>()
+.AddSingleton<IGetGlobalTogglesListCommand, GetGlobalTogglesListCommand>()
+.AddSingleton<IPostGlobalToggleCommand, PostGlobalToggleCommand>()
+.AddSingleton<IPutGlobalToggleCommand, PutGlobalToggleCommand>();
+        }
 
+        public static IServiceCollection AddProjectRepositories(this IServiceCollection services)
+        {
+            return services
+.AddSingleton<IGlobalToggleRepository, GlobalToggleRepository>();
+        }
 
-        public static IServiceCollection AddProjectRepositories(this IServiceCollection services) =>
-            services
-                .AddSingleton<IGlobalToggleRepository, GlobalToggleRepository>();
-
-        public static IServiceCollection AddProjectServices(this IServiceCollection services) =>
-            services
-                .AddSingleton<IClockService, ClockService>();
+        public static IServiceCollection AddProjectServices(this IServiceCollection services)
+        {
+            return services
+.AddSingleton<IClockService, ClockService>();
+        }
     }
 }

@@ -1,17 +1,16 @@
-namespace TogglerService.Controllers
+﻿namespace TogglerService.Controllers
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-    using TogglerService.Commands;
-    using TogglerService.Constants;
-    using TogglerService.ViewModels;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.JsonPatch;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.Net.Http.Headers;
     using Swashbuckle.AspNetCore.Annotations;
     using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using TogglerService.Commands;
+    using TogglerService.Constants;
+    using TogglerService.ViewModels;
 
     [Route("[controller]")]
     [ApiController]
@@ -26,13 +25,13 @@ namespace TogglerService.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "The allowed HTTP methods.")]
         public IActionResult Options()
         {
-            this.HttpContext.Response.Headers.AppendCommaSeparatedValues(
+            HttpContext.Response.Headers.AppendCommaSeparatedValues(
                 HeaderNames.Allow,
                 HttpMethods.Get,
                 HttpMethods.Head,
                 HttpMethods.Options,
                 HttpMethods.Post);
-            return this.Ok();
+            return Ok();
         }
 
 
@@ -51,7 +50,10 @@ namespace TogglerService.Controllers
         public Task<IActionResult> Post(
             [FromServices] IPostGlobalToggleCommand command,
             [FromBody] SaveGlobalToggleVM toggle,
-            CancellationToken cancellationToken) => command.ExecuteAsync(toggle);
+            CancellationToken cancellationToken)
+        {
+            return command.ExecuteAsync(toggle, cancellationToken);
+        }
 
 
         /// <summary>
@@ -67,7 +69,10 @@ namespace TogglerService.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "A collection of global toggles for the specified page.", typeof(List<ToggleVM>))]
         public Task<IActionResult> GetPage(
             [FromServices] IGetGlobalTogglesListCommand command,
-            CancellationToken cancellationToken) => command.ExecuteAsync();
+            CancellationToken cancellationToken)
+        {
+            return command.ExecuteAsync(cancellationToken);
+        }
 
 
         /// <summary>
@@ -77,9 +82,11 @@ namespace TogglerService.Controllers
         /// <returns>A 200 OK response.</returns>
         [HttpOptions("Global/{toggleId}")]
         [SwaggerResponse(StatusCodes.Status200OK, "The allowed HTTP methods.")]
+#pragma warning disable CA1801 // Naming Styles
         public IActionResult Options(string toggleId)
+#pragma warning restore CA1801 // Naming Styles
         {
-            this.HttpContext.Response.Headers.AppendCommaSeparatedValues(
+            HttpContext.Response.Headers.AppendCommaSeparatedValues(
                 HeaderNames.Allow,
                 HttpMethods.Delete,
                 HttpMethods.Get,
@@ -87,7 +94,7 @@ namespace TogglerService.Controllers
                 HttpMethods.Options,
                 HttpMethods.Post,
                 HttpMethods.Put);
-            return this.Ok();
+            return Ok();
         }
 
         /// <summary>
@@ -104,7 +111,10 @@ namespace TogglerService.Controllers
         public Task<IActionResult> Delete(
             [FromServices] IDeleteGlobalToggleCommand command,
             string toggleId,
-            CancellationToken cancellationToken) => command.ExecuteAsync(toggleId);
+            CancellationToken cancellationToken)
+        {
+            return command.ExecuteAsync(toggleId, cancellationToken);
+        }
 
         /// <summary>
         /// Gets the global toggle with the specified unique identifier.
@@ -122,7 +132,10 @@ namespace TogglerService.Controllers
         public Task<IActionResult> Get(
             [FromServices] IGetGlobalToggleCommand command,
             string toggleId,
-            CancellationToken cancellationToken) => command.ExecuteAsync(toggleId);
+            CancellationToken cancellationToken)
+        {
+            return command.ExecuteAsync(toggleId, cancellationToken);
+        }
 
 
         /// <summary>
@@ -142,12 +155,9 @@ namespace TogglerService.Controllers
             [FromServices] IPutGlobalToggleCommand command,
             string toggleId,
             [FromBody] SaveGlobalToggleVM globalToggle,
-            CancellationToken cancellationToken) => command.ExecuteAsync(toggleId, globalToggle);
-
-
-
-
-
-
+            CancellationToken cancellationToken)
+        {
+            return command.ExecuteAsync(toggleId, globalToggle, cancellationToken);
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace TogglerService.OperationFilters
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            var apiVersion = context.ApiDescription.GetApiVersion();
+            Microsoft.AspNetCore.Mvc.ApiVersion apiVersion = context.ApiDescription.GetApiVersion();
 
             // If the api explorer did not capture an API version for this operation then the action must be API
             // version-neutral, so there's nothing to add.
@@ -19,7 +19,7 @@ namespace TogglerService.OperationFilters
                 return;
             }
 
-            var parameters = operation.Parameters;
+            IList<IParameter> parameters = operation.Parameters;
 
             if (parameters == null)
             {
@@ -33,7 +33,7 @@ namespace TogglerService.OperationFilters
             // Unless you allow multiple API versioning methods in your app, your implementation could be simpler.
 
             // consider the url path segment parameter first
-            var parameter = parameters.FirstOrDefault(p => p.Name == "api-version");
+            IParameter parameter = parameters.FirstOrDefault(p => p.Name == "api-version");
             if (parameter == null)
             {
                 // the only other method in this sample is by query string

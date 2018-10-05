@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TogglerService.Models;
@@ -12,7 +12,7 @@ namespace TogglerService.Repositories
 
         Task Delete(ServiceToggle toggle, CancellationToken cancellationToken);
 
-        Task<ServiceToggle> Get(string toggleId, CancellationToken cancellationToken);
+        Task<ServiceToggle> GetById(string toggleId, CancellationToken cancellationToken);
 
         Task<ICollection<ServiceToggle>> GetAll( CancellationToken cancellationToken);
 

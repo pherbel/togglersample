@@ -1,17 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using TogglerService.Models;
+
 namespace TogglerService.Repositories
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using TogglerService.Models;
+
 
     public class GlobalToggleRepository : IGlobalToggleRepository
     {
         private static readonly List<GlobalToggle> Toggles;
 
-        static GlobalToggleRepository() =>
+#pragma warning disable CA1810 // Initialize reference type static fields inline
+        static GlobalToggleRepository()
+#pragma warning restore CA1810 // Initialize reference type static fields inline
+        {
             Toggles = new List<GlobalToggle>()
             {
                 new GlobalToggle()
@@ -29,6 +34,7 @@ namespace TogglerService.Repositories
                     Modified = DateTimeOffset.UtcNow,
                 }
             };
+        }
 
         public Task<GlobalToggle> Add(GlobalToggle toggle, CancellationToken cancellationToken)
         {
@@ -47,9 +53,9 @@ namespace TogglerService.Repositories
             return Task.CompletedTask;
         }
 
-        public Task<GlobalToggle> Get(string toggleId, CancellationToken cancellationToken)
+        public Task<GlobalToggle> GetById(string toggleId, CancellationToken cancellationToken)
         {
-            var toggle = Toggles.FirstOrDefault(x => x.Id == toggleId);
+            GlobalToggle toggle = Toggles.FirstOrDefault(x => x.Id == toggleId);
             return Task.FromResult(toggle);
         }
 
@@ -61,7 +67,7 @@ namespace TogglerService.Repositories
 
         public Task<GlobalToggle> Update(GlobalToggle toggle, CancellationToken cancellationToken)
         {
-            var existingToggle = Toggles.FirstOrDefault(x => x.Id == toggle.Id);
+            GlobalToggle existingToggle = Toggles.FirstOrDefault(x => x.Id == toggle.Id);
             existingToggle.Value = toggle.Value;
             return Task.FromResult(toggle);
         }
