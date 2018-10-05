@@ -13,7 +13,7 @@
 
         Task<GlobalToggle> GetById(string toggleId, CancellationToken cancellationToken);
 
-        Task<ICollection<GlobalToggle>> GetAll(CancellationToken cancellationToken);
+        Task<List<GlobalToggle>> GetAll(CancellationToken cancellationToken);
 
         Task<GlobalToggle> Update(GlobalToggle toggle, CancellationToken cancellationToken);
     }

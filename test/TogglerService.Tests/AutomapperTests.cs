@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using TogglerService.Models;
 using TogglerService.ViewModels;
 using Xunit;
@@ -20,11 +21,14 @@ namespace TogglerService.Tests
         [Fact]
         public void GlobalToggleVM_should_mapped_to_GlobalToggle_model()
         {
+            string serviceId = "ABC";
+            string toggleId = "isButtonBlue";
             GlobalToggleVM toggle = new GlobalToggleVM
             {
-                Id = "isButtonBlue",
+                Id = toggleId,
                 Value = true,
                 Created = DateTime.UtcNow,
+                ExcludedServices = new HashSet<string> { serviceId },
                 Modified = DateTime.UtcNow
             };
 
@@ -34,17 +38,24 @@ namespace TogglerService.Tests
             result.Id.Should().Be(toggle.Id);
             result.Value.Should().Be(toggle.Value);
             result.Created.Should().Be(toggle.Created);
+            result.ExcludedServices.Should().HaveCount(1);
+            result.ExcludedServices.Should().OnlyHaveUniqueItems();
+            result.ExcludedServices.Should().OnlyContain(e => e.ServiceId == serviceId);
+            result.ExcludedServices.Should().OnlyContain(e => e.ToggleId == toggleId);
             result.Modified.Should().Be(toggle.Modified);
         }
 
         [Fact]
         public void GlobalToggle_should_mapped_to_GlobalToggleVM_model()
         {
+            string serviceId = "ABC";
+            string toggleId = "isButtonBlue";
             GlobalToggle toggle = new GlobalToggle
             {
-                Id = "isButtonBlue",
+                Id = toggleId,
                 Value = true,
                 Created = DateTime.UtcNow,
+                ExcludedServices = new List<ExcludedService> { new ExcludedService { ToggleId = toggleId, ServiceId = serviceId } },
                 Modified = DateTime.UtcNow
             };
 
@@ -54,6 +65,9 @@ namespace TogglerService.Tests
             result.Id.Should().Be(toggle.Id);
             result.Value.Should().Be(toggle.Value);
             result.Created.Should().Be(toggle.Created);
+            result.ExcludedServices.Should().HaveCount(1);
+            result.ExcludedServices.Should().OnlyHaveUniqueItems();
+            result.ExcludedServices.Should().OnlyContain(e => e == serviceId);
             result.Modified.Should().Be(toggle.Modified);
         }
 

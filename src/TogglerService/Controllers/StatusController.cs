@@ -1,12 +1,14 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using TogglerService.Constants;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+
 namespace TogglerService.Controllers
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using TogglerService.Constants;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
-    using Swashbuckle.AspNetCore.Annotations;
+
 
     /// <summary>
     /// The status of this API.

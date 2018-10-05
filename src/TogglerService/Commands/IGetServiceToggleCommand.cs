@@ -2,7 +2,7 @@
 {
     using Boxed.AspNetCore;
 
-    public interface IGetServiceToggleCommand : IAsyncCommand<string>
+    public interface IGetServiceToggleCommand : IAsyncCommand<string,string>
     {
     }
 }

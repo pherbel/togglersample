@@ -1,75 +1,73 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TogglerService.Data;
 using TogglerService.Models;
+using TogglerService.Services;
 
 namespace TogglerService.Repositories
 {
 
 
-    public class GlobalToggleRepository : IGlobalToggleRepository
+    public class GlobalToggleRepository : EFRepositoryBase, IGlobalToggleRepository
     {
-        private static readonly List<GlobalToggle> Toggles;
+        private readonly IClockService _clockService;
 
-#pragma warning disable CA1810 // Initialize reference type static fields inline
-        static GlobalToggleRepository()
-#pragma warning restore CA1810 // Initialize reference type static fields inline
+        public GlobalToggleRepository(ApplicationDbContext context, IClockService clockService) : base(context)
         {
-            Toggles = new List<GlobalToggle>()
+            if (clockService is null)
             {
-                new GlobalToggle()
-                {
-                    Id = "isButtonBlue",
-                    Value = true,
-                    Created = DateTimeOffset.UtcNow,
-                    Modified = DateTimeOffset.UtcNow,
-                },
-                new GlobalToggle()
-                {
-                    Id = "isButtonRed",
-                    Value = false,
-                    Created = DateTimeOffset.UtcNow,
-                    Modified = DateTimeOffset.UtcNow,
-                }
-            };
-        }
-
-        public Task<GlobalToggle> Add(GlobalToggle toggle, CancellationToken cancellationToken)
-        {
-            Toggles.Add(toggle);
-            toggle.Id = Toggles.Max(x => x.Id) + 1;
-            return Task.FromResult(toggle);
-        }
-
-        public Task Delete(GlobalToggle toggle, CancellationToken cancellationToken)
-        {
-            if (Toggles.Contains(toggle))
-            {
-                Toggles.Remove(toggle);
+                throw new ArgumentNullException(nameof(clockService));
             }
 
-            return Task.CompletedTask;
+            _clockService = clockService;
+
+        }
+
+        public async Task<GlobalToggle> Add(GlobalToggle toggle, CancellationToken cancellationToken)
+        {
+            DateTimeOffset now = _clockService.UtcNow;
+            toggle.Created = now;
+            toggle.Modified = now;
+            await Context.GlobalToggles.AddAsync(toggle);
+            await Context.ExcludedServices.AddRangeAsync(toggle.ExcludedServices);
+            await Save();
+            return toggle;
+        }
+
+        public async Task Delete(GlobalToggle toggle, CancellationToken cancellationToken)
+        {
+            if (await Context.GlobalToggles.AnyAsync(t => t.Id == t.Id, cancellationToken))
+            {
+                Context.GlobalToggles.Remove(toggle);
+                Context.ExcludedServices.RemoveRange(toggle.ExcludedServices);
+                await Save(cancellationToken);
+            }
         }
 
         public Task<GlobalToggle> GetById(string toggleId, CancellationToken cancellationToken)
         {
-            GlobalToggle toggle = Toggles.FirstOrDefault(x => x.Id == toggleId);
-            return Task.FromResult(toggle);
+            return Context.GlobalToggles.Include(t => t.ExcludedServices).SingleOrDefaultAsync(t => t.Id == toggleId, cancellationToken);
         }
 
-        public Task<ICollection<GlobalToggle>> GetAll( CancellationToken cancellationToken)
+        public Task<List<GlobalToggle>> GetAll(CancellationToken cancellationToken)
         {
-            return Task.FromResult((ICollection<GlobalToggle>)Toggles);
+            return Context.GlobalToggles.Include(t => t.ExcludedServices).ToListAsync(cancellationToken);
         }
 
-
-        public Task<GlobalToggle> Update(GlobalToggle toggle, CancellationToken cancellationToken)
+        public async Task<GlobalToggle> Update(GlobalToggle toggle, CancellationToken cancellationToken)
         {
-            GlobalToggle existingToggle = Toggles.FirstOrDefault(x => x.Id == toggle.Id);
+            GlobalToggle existingToggle = await Context.GlobalToggles.Include(t => t.ExcludedServices).SingleOrDefaultAsync(t => t.Id == toggle.Id, cancellationToken);
             existingToggle.Value = toggle.Value;
-            return Task.FromResult(toggle);
+            existingToggle.Modified = _clockService.UtcNow;
+            Context.Update(existingToggle);
+            Context.ExcludedServices.RemoveRange(existingToggle.ExcludedServices);
+            await Context.ExcludedServices.AddRangeAsync(toggle.ExcludedServices);
+            await Save(cancellationToken);
+
+            return existingToggle;
         }
     }
 }

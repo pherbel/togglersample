@@ -35,7 +35,7 @@ namespace TogglerService.Commands
             ServiceToggleVM toggleViewModel = _mapper.Map<ServiceToggle, ServiceToggleVM>(toggle);
 
             return new CreatedAtRouteResult(
-                TogglesControllerRoute.GetServiceToggle,
+                ServiceControllerRoute.GetServiceToggle,
                 new { toggleId = toggleViewModel.Id },
                 toggleViewModel);
         }

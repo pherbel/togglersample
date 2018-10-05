@@ -38,9 +38,9 @@ namespace TogglerService.Commands
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> ExecuteAsync(string toggleId, CancellationToken cancellationToken)
+        public async Task<IActionResult> ExecuteAsync(string toggleId,string serviceId, CancellationToken cancellationToken)
         {
-            ServiceToggle toggle = await _serviceToggleRepository.GetById(toggleId, cancellationToken);
+            ServiceToggle toggle = await _serviceToggleRepository.GetById(toggleId, serviceId, cancellationToken);
             if (toggle == null)
             {
                 return new NotFoundResult();

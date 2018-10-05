@@ -1,80 +1,79 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TogglerService.Data;
 using TogglerService.Models;
+using TogglerService.Services;
 
 namespace TogglerService.Repositories
 {
 
 
-    public class ServiceToggleRepository : IServiceToggleRepository
+    public class ServiceToggleRepository : EFRepositoryBase, IServiceToggleRepository
     {
-        private static readonly List<ServiceToggle> Toggles;
+        private readonly IClockService _clockService;
 
-#pragma warning disable CA1810 // Initialize reference type static fields inline
-        static ServiceToggleRepository()
-#pragma warning restore CA1810 // Initialize reference type static fields inline
+        public ServiceToggleRepository(ApplicationDbContext context, IClockService clockService) : base(context)
         {
-            Toggles = new List<ServiceToggle>()
-            {
-                new ServiceToggle()
-                {
-                    Id = "isButtonBlue",
-                    ServiceId = "ABC",
-                    Value = false,
-                    VersionRange = "*",
-                    Created = DateTimeOffset.UtcNow,
-                    Modified = DateTimeOffset.UtcNow,
-                },
-                new ServiceToggle()
-                {
-                    Id = "isButtonGreen",
-                    ServiceId = "ABC",
-                    Value = true,
-                    VersionRange = "*",
-                    Created = DateTimeOffset.UtcNow,
-                    Modified = DateTimeOffset.UtcNow,
-                },
-            };
+            if (clockService is null)
+                throw new ArgumentNullException(nameof(clockService));
+
+            _clockService = clockService;
         }
 
-        public Task<ServiceToggle> Add(ServiceToggle toggle, CancellationToken cancellationToken)
+        public async Task<ServiceToggle> Add(ServiceToggle toggle, CancellationToken cancellationToken)
         {
-            Toggles.Add(toggle);
-            toggle.Id = Toggles.Max(x => x.Id) + 1;
-            return Task.FromResult(toggle);
+            DateTimeOffset now = _clockService.UtcNow;
+            toggle.Created = now;
+            toggle.Modified = now;
+            Context.ServiceToggles.Add(toggle);
+            await Save();
+            return toggle;
         }
 
-        public Task Delete(ServiceToggle toggle, CancellationToken cancellationToken)
+        public async Task Delete(ServiceToggle toggle, CancellationToken cancellationToken)
         {
-            if (Toggles.Contains(toggle))
+            if (await Context.GlobalToggles.AnyAsync(t => t.Id == t.Id, cancellationToken))
             {
-                Toggles.Remove(toggle);
+                Context.ServiceToggles.Remove(toggle);
+                await Save(cancellationToken);
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task<ServiceToggle> GetById(string toggleId, CancellationToken cancellationToken)
+        public Task<ServiceToggle> GetById(string toggleId, string serviceId, CancellationToken cancellationToken)
         {
-            ServiceToggle toggle = Toggles.FirstOrDefault(x => x.Id == toggleId);
-            return Task.FromResult(toggle);
+            return Context.ServiceToggles.SingleOrDefaultAsync(t => t.Id == toggleId && t.ServiceId == serviceId, cancellationToken);
+
         }
 
-        public Task<ICollection<ServiceToggle>> GetAll(CancellationToken cancellationToken)
+        public Task<List<ServiceToggle>> GetAll(CancellationToken cancellationToken)
         {
-            return Task.FromResult((ICollection<ServiceToggle>)Toggles);
+            return Context.ServiceToggles.ToListAsync(cancellationToken);
         }
 
-        public Task<ServiceToggle> Update(ServiceToggle toggle, CancellationToken cancellationToken)
+        public Task<List<ServiceToggle>> GetAllByToggleId(string toggleId, CancellationToken cancellationToken)
         {
-            ServiceToggle existingToggle = Toggles.FirstOrDefault(x => x.Id == toggle.Id && x.ServiceId == toggle.ServiceId);
+            return Context.ServiceToggles.Where(t=> t.Id == toggleId).ToListAsync(cancellationToken);
+        }
+
+        public Task<List<ServiceToggle>> GetAllByServiceId(string serviceId, CancellationToken cancellationToken)
+        {
+            return Context.ServiceToggles.Where(t => t.ServiceId == serviceId).ToListAsync(cancellationToken);
+        }
+
+        public async Task<ServiceToggle> Update(ServiceToggle toggle, CancellationToken cancellationToken)
+        {
+            ServiceToggle existingToggle = await Context.ServiceToggles.SingleOrDefaultAsync(t => t.Id == toggle.Id, cancellationToken);
             existingToggle.Value = toggle.Value;
             existingToggle.VersionRange = toggle.VersionRange;
-            existingToggle.Modified = DateTime.UtcNow;
-            return Task.FromResult(toggle);
+            existingToggle.Modified = _clockService.UtcNow;
+            Context.Update(existingToggle);
+            await Save(cancellationToken);
+
+            return existingToggle;
         }
     }
 }

@@ -1,14 +1,14 @@
-namespace TogglerService
+﻿namespace TogglerService
 {
+    using Boxed.AspNetCore;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Mvc.ApiExplorer;
+    using Microsoft.Extensions.DependencyInjection;
     using System;
     using System.Linq;
     using System.Reflection;
     using TogglerService.Constants;
     using TogglerService.Options;
-    using Boxed.AspNetCore;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Mvc.ApiExplorer;
-    using Microsoft.Extensions.DependencyInjection;
 
     public static partial class ApplicationBuilderExtensions
     {
@@ -56,28 +56,28 @@ namespace TogglerService
         public static IApplicationBuilder UseCustomSwaggerUI(this IApplicationBuilder application)
         {
             return application.UseSwaggerUI(
-options =>
-{
-                    // Set the Swagger UI browser document title.
-                    options.DocumentTitle = typeof(Startup)
-.Assembly
-.GetCustomAttribute<AssemblyProductAttribute>()
-.Product;
-                    // Set the Swagger UI to render at '/'.
-                    options.RoutePrefix = string.Empty;
-                    // Show the request duration in Swagger UI.
-                    options.DisplayRequestDuration();
+                                options =>
+                                {
+                                    // Set the Swagger UI browser document title.
+                                    options.DocumentTitle = typeof(Startup)
+                                                                .Assembly
+                                                                .GetCustomAttribute<AssemblyProductAttribute>()
+                                                                .Product;
+                                    // Set the Swagger UI to render at '/'.
+                                    options.RoutePrefix = string.Empty;
+                                    // Show the request duration in Swagger UI.
+                                    options.DisplayRequestDuration();
 
-IApiVersionDescriptionProvider provider = application.ApplicationServices.GetService<IApiVersionDescriptionProvider>();
-foreach (ApiVersionDescription apiVersionDescription in provider
-.ApiVersionDescriptions
-.OrderByDescending(x => x.ApiVersion))
-{
-options.SwaggerEndpoint(
-$"/swagger/{apiVersionDescription.GroupName}/swagger.json",
-$"Version {apiVersionDescription.ApiVersion}");
-}
-});
+                                    IApiVersionDescriptionProvider provider = application.ApplicationServices.GetService<IApiVersionDescriptionProvider>();
+                                    foreach (ApiVersionDescription apiVersionDescription in provider
+                                    .ApiVersionDescriptions
+                                    .OrderByDescending(x => x.ApiVersion))
+                                    {
+                                        options.SwaggerEndpoint(
+                                        $"/swagger/{apiVersionDescription.GroupName}/swagger.json",
+                                        $"Version {apiVersionDescription.ApiVersion}");
+                                    }
+                                });
         }
     }
 }

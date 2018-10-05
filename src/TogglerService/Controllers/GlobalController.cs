@@ -44,8 +44,8 @@
         /// <param name="cancellationToken">The cancellation token used to cancel the HTTP request.</param>
         /// <returns>A 201 Created response containing the newly created  global toggle or a 400 Bad Request if the  global toggle is
         /// invalid.</returns>
-        [HttpPost("", Name = TogglesControllerRoute.PostGlobalToggle)]
-        [SwaggerResponse(StatusCodes.Status201Created, "The global toggle was created.", typeof(ToggleVM))]
+        [HttpPost("", Name = GlobalControllerRoute.PostGlobalToggle)]
+        [SwaggerResponse(StatusCodes.Status201Created, "The global toggle was created.", typeof(GlobalToggleVM))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "The global toggle is invalid.", typeof(ModelStateDictionary))]
         public Task<IActionResult> Post(
             [FromServices] IPostGlobalToggleCommand command,
@@ -64,9 +64,9 @@
         /// <returns>A 200 OK response containing a collection of global toggles, a 400 Bad Request if the page request
         /// parameters are invalid or a 404 Not Found if a page with the specified page number was not found.
         /// </returns>
-        [HttpGet("", Name = TogglesControllerRoute.GetGlobalTogglesList)]
-        [HttpHead("", Name = TogglesControllerRoute.HeadGlobalTogglesList)]
-        [SwaggerResponse(StatusCodes.Status200OK, "A collection of global toggles for the specified page.", typeof(List<ToggleVM>))]
+        [HttpGet("", Name = GlobalControllerRoute.GetGlobalTogglesList)]
+        [HttpHead("", Name = GlobalControllerRoute.HeadGlobalTogglesList)]
+        [SwaggerResponse(StatusCodes.Status200OK, "A collection of global toggles for the specified page.", typeof(List<GlobalToggleVM>))]
         public Task<IActionResult> GetPage(
             [FromServices] IGetGlobalTogglesListCommand command,
             CancellationToken cancellationToken)
@@ -105,7 +105,7 @@
         /// <param name="cancellationToken">The cancellation token used to cancel the HTTP request.</param>
         /// <returns>A 204 No Content response if the global toggle was deleted or a 404 Not Found if a global toggle with the specified
         /// unique identifier was not found.</returns>
-        [HttpDelete("{toggleId}", Name = TogglesControllerRoute.DeleteGlobalToggle)]
+        [HttpDelete("{toggleId}", Name = GlobalControllerRoute.DeleteGlobalToggle)]
         [SwaggerResponse(StatusCodes.Status204NoContent, "The global toggle with the specified unique identifier was deleted.")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "A global toggle with the specified unique identifier was not found.")]
         public Task<IActionResult> Delete(
@@ -124,9 +124,9 @@
         /// <param name="cancellationToken">The cancellation token used to cancel the HTTP request.</param>
         /// <returns>A 204 No Content response if the global toggle was deleted or a 404 Not Found if a global toggle with the specified
         /// unique identifier was not found.</returns>
-        [HttpGet("{toggleId}", Name = TogglesControllerRoute.GetGlobalToggle)]
-        [HttpHead("{toggleId}", Name = TogglesControllerRoute.HeadGlobalToggle)]
-        [SwaggerResponse(StatusCodes.Status200OK, "The global toggle with the specified unique identifier.", typeof(ToggleVM))]
+        [HttpGet("{toggleId}", Name = GlobalControllerRoute.GetGlobalToggle)]
+        [HttpHead("{toggleId}", Name = GlobalControllerRoute.HeadGlobalToggle)]
+        [SwaggerResponse(StatusCodes.Status200OK, "The global toggle with the specified unique identifier.", typeof(GlobalToggleVM))]
         [SwaggerResponse(StatusCodes.Status304NotModified, "The global toggle has not changed since the date given in the If-Modified-Since HTTP header.")]
         [SwaggerResponse(StatusCodes.Status404NotFound, "A global toggle with the specified unique identifier was not found.")]
         public Task<IActionResult> Get(
@@ -147,7 +147,7 @@
         /// <param name="cancellationToken">The cancellation token used to cancel the HTTP request.</param>
         /// <returns>A 200 OK response containing the newly updated global toggle, a 400 Bad Request if the global toggle is invalid or a
         /// or a 404 Not Found if a global toggle with the specified unique identifier was not found.</returns>
-        [HttpPut("{toggleId}", Name = TogglesControllerRoute.PutGlobalToggle)]
+        [HttpPut("{toggleId}", Name = GlobalControllerRoute.PutGlobalToggle)]
         [SwaggerResponse(StatusCodes.Status200OK, "The global toggle was updated.", typeof(GlobalToggleVM))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "The global toggle is invalid.", typeof(ModelStateDictionary))]
         [SwaggerResponse(StatusCodes.Status404NotFound, "A global toggle with the specified unique identifier could not be found.")]

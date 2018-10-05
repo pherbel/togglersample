@@ -1,9 +1,9 @@
 ﻿namespace TogglerService.Commands
 {
-    using TogglerService.ViewModels;
     using Boxed.AspNetCore;
+    using TogglerService.ViewModels;
 
-    public interface IPutServiceToggleCommand : IAsyncCommand<string, SaveServiceToggleVM>
+    public interface IPutServiceToggleCommand : IAsyncCommand<string, string, SaveServiceToggleVM>
     {
     }
 }

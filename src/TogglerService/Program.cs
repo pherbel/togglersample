@@ -25,7 +25,10 @@
 
             try
             {
+
+
                 Log.Information("Starting application");
+                SeedData.EnsureSeedData(webHost.Services); //TODO: It used only for Local Test
                 webHost.Run();
                 Log.Information("Stopped application");
                 return 0;

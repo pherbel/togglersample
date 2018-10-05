@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using TogglerService.Constants;
+using TogglerService.Data;
 
 namespace TogglerService
 {
@@ -42,6 +44,10 @@ namespace TogglerService
         /// </summary>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationDbContext>(options =>
+                        options.UseInMemoryDatabase("ServiceTogglesDatabase")); //TODO:Use persistent database provider instead of temporary InMemory
+
+
             return services
                     .AddCorrelationIdFluent()
                     .AddCustomCaching()

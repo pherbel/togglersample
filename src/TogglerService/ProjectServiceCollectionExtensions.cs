@@ -1,8 +1,7 @@
+﻿using Microsoft.Extensions.DependencyInjection;
 using TogglerService.Commands;
 using TogglerService.Repositories;
 using TogglerService.Services;
-using TogglerService.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace TogglerService
 {
@@ -21,23 +20,32 @@ namespace TogglerService
         public static IServiceCollection AddProjectCommands(this IServiceCollection services)
         {
             return services
-.AddSingleton<IDeleteGlobalToggleCommand, DeleteGlobalToggleCommand>()
-.AddSingleton<IGetGlobalToggleCommand, GetGlobalToggleCommand>()
-.AddSingleton<IGetGlobalTogglesListCommand, GetGlobalTogglesListCommand>()
-.AddSingleton<IPostGlobalToggleCommand, PostGlobalToggleCommand>()
-.AddSingleton<IPutGlobalToggleCommand, PutGlobalToggleCommand>();
+                    .AddScoped<IDeleteGlobalToggleCommand, DeleteGlobalToggleCommand>()
+                    .AddScoped<IGetGlobalToggleCommand, GetGlobalToggleCommand>()
+                    .AddScoped<IGetGlobalTogglesListCommand, GetGlobalTogglesListCommand>()
+                    .AddScoped<IPostGlobalToggleCommand, PostGlobalToggleCommand>()
+                    .AddScoped<IPutGlobalToggleCommand, PutGlobalToggleCommand>()
+                    .AddScoped<IDeleteServiceToggleCommand, DeleteServiceToggleCommand>()
+                    .AddScoped<IGetServiceToggleCommand, GetServiceToggleCommand>()
+                    .AddScoped<IGetServiceTogglesListCommand, GetServiceTogglesListCommand>()
+                    .AddScoped<IGetServiceTogglesListByToggleIdCommand, GetServiceTogglesListByToggleIdCommand>()
+                    .AddScoped<IPostServiceToggleCommand, PostServiceToggleCommand>()
+                    .AddScoped<IPutServiceToggleCommand, PutServiceToggleCommand>()
+                    .AddScoped<IGetTogglesListCommand, GetTogglesListCommand>();
         }
 
         public static IServiceCollection AddProjectRepositories(this IServiceCollection services)
         {
             return services
-.AddSingleton<IGlobalToggleRepository, GlobalToggleRepository>();
+                    .AddScoped<IGlobalToggleRepository, GlobalToggleRepository>()
+                    .AddScoped<IServiceToggleRepository, ServiceToggleRepository>();
         }
 
         public static IServiceCollection AddProjectServices(this IServiceCollection services)
         {
             return services
-.AddSingleton<IClockService, ClockService>();
+                    .AddSingleton<IClockService, ClockService>()
+                    .AddSingleton<IHierarchyRuleEvaluator, BasicHierarchyRuleEvaluator>();
         }
     }
 }

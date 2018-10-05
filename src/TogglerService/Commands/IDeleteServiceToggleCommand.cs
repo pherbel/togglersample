@@ -2,7 +2,7 @@
 {
     using Boxed.AspNetCore;
 
-    public interface IDeleteServiceToggleCommand : IAsyncCommand<string>
+    public interface IDeleteServiceToggleCommand : IAsyncCommand<string, string>
     {
     }
 }
